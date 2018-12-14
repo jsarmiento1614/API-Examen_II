@@ -1,49 +1,44 @@
-// importo los espacio de nombres.
-var express = require("express");
-var sql = require("mssql");
-var bodyparser = require("body-parser");
-var cors = require("cors");
-var dotenv = require("dontenv");
+var express = require('express');
+var sql = require('mssql');
+var cors = require('cors');
+var bodyparser = require('body-parser');
+var env = require('dotenv');
 
-// agrego el express a la variable app
 var app = express();
 
-// Pongo en uso  bodyparser y cors
+const result = env.config();
+
 app.use(cors());
 app.use(bodyparser());
+app.use(bodyparser.urlencoded({
+    extended: true
+}));
 
-// metodo para agregar la configuracion de la base de datos.
 const sqlConfig = {
-    user: process.env.DB_User,
-    password: process.env.DB_password,
-    server: process.env.DB_server,
-    database: process.env.DB_database,
+    server: process.env.DB_SERVER,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_DATABASE,
     port: parseInt(process.env.DB_PORT),
-    debug: true,
+    debug: false,
     options: {
-        encrypt: false
+        encrypt: false,
     }
 }
 
-// Creo una funcion  para capturar los errores ocacionados en el servidor.
 
-app.use(function(err, req, res, next){
+app.use(function (err, req, res, next) {
     console.log(err);
-    res.send({success: false, message: err});
+    res.send({
+        success: false,
+        message: err
+    });
 });
 
-// escucho el puerto para ejecutar el servidor
 app.listen(parseInt(process.env.APP_PORT), () => {
-    console.log("El servidor esta corriendo en el servidor 8090");
-    console.log(result.parse);
-    console.log(msqConfig);
+    console.log("Esta corriendo el servidor!!!")
+    console.log(result.parsed);
+    console.log(sqlConfig);
 });
 
-// importo los archivos que usare de forma externa.
-require("./movies")(app, sql, sqlConfig);
-require("./users")(app, sql, sqlConfig);
-
-
-
-
-
+require("./enviroment/user")(app, sql, sqlConfig);
