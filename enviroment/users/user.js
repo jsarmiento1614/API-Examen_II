@@ -9,16 +9,16 @@ module.exports = (app, sql, sqlConfig) => {
 
     app.post("/v1/user/create", (req, res, next) => {
 
-        var user = req.body.user;
-        var password = req.body.password;
+        var email = req.body.user;
+        var pass = req.body.pass;
 
-        console.log(user + password);
+        console.log(email + pass);
 
-        if (!user && !password) {
+        if (!email && !pass) {
             res.send("error");
         }
 
-        var q = `insert into dbo.Users(UserName, UserPassword) values ('${user}','${password}')`;
+        var q = `insert into dbo.Users(UserName, UserPassword) values ('${email}','${pass}')`;
 
         new sql.ConnectionPool(sqlConfig).connect().then(pool => {
             return pool.query(q)
@@ -39,13 +39,13 @@ module.exports = (app, sql, sqlConfig) => {
 
     app.post("/v1/user/login", (req, res, next) => {
         var user = req.body.user;
-        var password = req.body.password
+        var pass = req.body.pass;
 
-        if (!user || !password) {
+        if (!user || !pass) {
             res.status(403).send({ message: "missing parameters" });
         }
 
-        var q = `select top 1 * from dbo.Users u where u.UserName = '${user}' and u.UserPassword = '${password}'`
+        var q = `select top 1 * from dbo.Users u where u.UserName = '${user}' and u.UserPassword = '${pass}'`
 
         new sql.ConnectionPool(sqlConfig).connect().then(request => {
             return request.query(q);

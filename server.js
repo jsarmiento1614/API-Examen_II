@@ -41,4 +41,4 @@ app.listen(parseInt(process.env.APP_PORT), () => {
     console.log(sqlConfig);
 });
 
-require("./enviroment/user")(app, sql, sqlConfig);
+ require("./enviroment/users/user")(app, sql, sqlConfig);
