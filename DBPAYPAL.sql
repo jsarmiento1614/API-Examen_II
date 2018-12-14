@@ -50,8 +50,8 @@ CREATE TABLE Transacciones
 [TransaccionDetalleId] int NOT NULL,
 CONSTRAINT PK_Transacciones PRIMARY KEY([TransaccionId]),
 CONSTRAINT FK_Usuarios FOREIGN KEY ([UsuarioId])
-REFERENCES Usuario([UsuarioId]),
-CONSTRAINT FK_TipoTransacciones FOREIGN KEY ([TipoTransaccionId])
+REFERENCES Usuario([    ]),
+CONSTRAINT FK_TipoTransacciones FOREIGN KEY ([  ])
 REFERENCES TipoTransaccion([TipoTransaccionId]),
 CONSTRAINT FK_TransaccionDetalles FOREIGN KEY ([TransaccionDetalleId])
 REFERENCES TransaccionDetalle([TransaccionDetalleId])

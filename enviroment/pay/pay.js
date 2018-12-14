@@ -1,4 +1,4 @@
-/* var auth = require('./auth');
+var auth = require('../users/auth');
 module.exports = (app, sql, sqlConfig) =>{
 
 app.post("/v1/payment/:userId/create", (req, res, next) => {
@@ -70,5 +70,34 @@ app.put("/v1/payment/:paymentId/update", (req, res, next) => {
         })
 });
 
+app.get('/v1/payment/:userId/all', auth.ValidateToken, (req, res, next) => {
+    var userId = req.params.userId;
+
+
+    if (!userId) {
+        res.status(403).send({
+            message: "missing parameters"
+        });
+    }
+
+    var q = `SELECT * FROM dbo.Usuario u INNER JOIN Transacciones t ON u.UsuarioId=t.UsuarioId INNER JOIN TransaccionDetalle td ON t.TransaccionDetalleId = td.TransaccionDetalleId INNER JOIN TipoTransaccion tt ON t.TipoTransaccionId = tt.TipoTransaccionId where UsuarioId=${userId}`
+
+    new sql.ConnectionPool(sqlConfig).connect().then(pool => {
+            return pool.query(q)
+        })
+        .then(result => {
+            var data = {
+                success: true,
+                message: '',
+                data: result.recordset
+            }
+            res.send(data);
+
+            sql.close();
+        }).catch(err => {
+            return next(err);
+        });
+})
+
 }
- */
+
