@@ -46,20 +46,22 @@ app.post("/v1/payment/:userId/:idTipoTra/:detalletipo/create", auth.ValidateToke
             return next(err);
         })
 });
-app.put("/v1/payment/:paymentId/update", (req, res, next) => {
-    var user = req.body.user;
-    var pass = req.body.pass;
-
-    if (!user || !pass) {
+app.put("/v1/payment/:paymentId/update", (req, res, next) => { 
+    var userId = req.body.userId;
+    var Cantidad = req.body.Cantidad;
+    var Concurrencia = req.body.Concurrencia;
+    
+    if (!userId || !Cantidad || !Concurrencia ) {
         res.status(403).send({
             message: "missing parameters"
         });
     }
 
-    var q = `select top 1 * from dbo.Users u where u.UserName = '${user}' and u.UserPassword = '${pass}'`
+    var Actualizar = `UPDATE TransaccionDetalle.Cantidad,TransaccionDetalle.Concurrencia, Usuario.UsuarioId SET Cantidad = '${Cantidad}', Concurrencia = '${Concurrencia}',
+     From TransaccionDetalle INNER JOIN TransaccionDetalle.TransaccionId = Usuario.UsuarioId WHERE UserId = '${UserId}';`
 
     new sql.ConnectionPool(sqlConfig).connect().then(request => {
-        return request.query(q);
+        return request.query(Actualizar);
     })
         .then(result => {
 
