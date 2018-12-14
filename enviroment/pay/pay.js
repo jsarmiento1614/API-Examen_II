@@ -1,18 +1,30 @@
 var auth = require('../users/auth');
 module.exports = (app, sql, sqlConfig) =>{
 
-app.post("/v1/payment/:userId/create", (req, res, next) => {
-    var user = req.body.user;
-    var pass = req.body.pass;
+app.post("/v1/payment/:userId/:idTipoTra/:detalletipo/create", auth.ValidateToken, (req, res, next) => {
+    var userId = req.params.userId;
+    var destinatario = req.body.destinatario;
+    var date = req.body.date;
+    var tipo = req.params.tipo;
+    var cantidad = req.body.cantidad;
+    var concurrenia = req.body.concurrenia;
+    var descripcion = req.body.descripcion;
+    var noDoc = req.body.noDoc;
 
-    if (!user || !pass) {
+
+    /* if (!user || !pass) {
         res.status(403).send({ message: "missing parameters" });
-    }
+    } */
+    var registro =`create procedure insertar @Destinatario varchar(100), @Date Datetime, @TipoTransaccionId int,
+     @Cantidad decimal (8,4) , @Concurrencia varchar (10), @Descripcion varchar (100) , @DocumentoRefencia int As
+     Begin Insert into Transacciones Destinatario, Date) Values('${destinatario}', '${date}')
+     Insert into TransaccionDetalle Cantidad, Concurrencia, Descripcion, DocumentoRefencia)
+     Values ('${cantidad}','${concurrenia}', '${descripcion}' '${noDoc}')End`
 
-    var q = `select top 1 * from dbo.Users u where u.UserName = '${user}' and u.UserPassword = '${pass}'`
+   
 
     new sql.ConnectionPool(sqlConfig).connect().then(request => {
-        return request.query(q);
+        return request.query(registro);
     })
         .then(result => {
 
@@ -20,13 +32,13 @@ app.post("/v1/payment/:userId/create", (req, res, next) => {
                 res.send({
                     success: true,
                     message: "",
-                    token: auth.CreateToken(result.recordset.UserId),
+                    token: auth.CreateToken(result.recordset.UsuarioId),
                     user: result.recordset
                 });
             } else {
                 res.status(403).send({
                     success: false,
-                    message: "Error de usuario o password"
+                    message: "Registro Creado"
                 })
             }
         })
