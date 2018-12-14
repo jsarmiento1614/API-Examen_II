@@ -23,6 +23,7 @@ const sqlConfig = {
     debug: false,
     options: {
         encrypt: false,
+        instanceName: process.env.DB_INSTANCE_NAME
     }
 }
 
@@ -42,3 +43,4 @@ app.listen(parseInt(process.env.APP_PORT), () => {
 });
 
  require("./enviroment/users/user")(app, sql, sqlConfig);
+//  require("./enviroment/pay/pay")(app, sql, sqlConfig);

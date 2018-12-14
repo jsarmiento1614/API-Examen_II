@@ -1,3 +1,5 @@
+/* var auth = require('./auth');
+module.exports = (app, sql, sqlConfig) =>{
 
 app.post("/v1/payment/:userId/create", (req, res, next) => {
     var user = req.body.user;
@@ -68,4 +70,5 @@ app.put("/v1/payment/:paymentId/update", (req, res, next) => {
         })
 });
 
-
+}
+ */
