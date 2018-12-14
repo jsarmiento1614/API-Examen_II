@@ -46,13 +46,15 @@ CREATE TABLE Transacciones
 [UsuarioId] INT NOT NULL,
 [Destinatario] varchar(100),
 [Date] Datetime NOT NULL,
-TipoTransaccionId int NOT NULL,
-TransaccionDetalleId int NOT NULL,
+[TipoTransaccionId] int NOT NULL,
+[TransaccionDetalleId] int NOT NULL,
 CONSTRAINT PK_Transacciones PRIMARY KEY([TransaccionId]),
-CONSTRAINT FK_TipoTransacciones FOREIGN KEY (TipoTransaccionId)
-REFERENCES TipoTransaccion(TipoTransaccionId),
-CONSTRAINT FK_TransaccionDetalles FOREIGN KEY (TransaccionDetalleId)
-REFERENCES TransaccionDetalle(TransaccionDetalleId)
+CONSTRAINT FK_Usuarios FOREIGN KEY ([UsuarioId])
+REFERENCES Usuario([UsuarioId]),
+CONSTRAINT FK_TipoTransacciones FOREIGN KEY ([TipoTransaccionId])
+REFERENCES TipoTransaccion([TipoTransaccionId]),
+CONSTRAINT FK_TransaccionDetalles FOREIGN KEY ([TransaccionDetalleId])
+REFERENCES TransaccionDetalle([TransaccionDetalleId])
 )
 
 
